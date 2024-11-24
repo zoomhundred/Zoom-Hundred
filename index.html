@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoom Hundred</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url('your-background-image-url.jpg') no-repeat center center/cover;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .form-page {
+            display: none;
+        }
+        .form-page.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+        }
+        .buttons {
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button.next {
+            background: #28a745;
+            color: white;
+        }
+        button.back {
+            background: #6c757d;
+            color: white;
+        }
+        .thank-you {
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Zoom Hundred</h1>
+        <!-- Form Pages -->
+        <div id="form-page-1" class="form-page active">
+            <h2>Your Video Requirement</h2>
+            <div class="form-group">
+                <label for="requirement">Select your requirement:</label>
+                <select id="requirement" required>
+                    <option value="" disabled selected>Select</option>
+                    <option value="AD video with Model">AD video with Model</option>
+                    <option value="AD Video with Voiceover Only">AD Video with Voiceover Only</option>
+                    <option value="Product Videography & Photography">Product Videography & Photography</option>
+                    <option value="TV & Theatre ADS">TV & Theatre ADS</option>
+                    <option value="Concept & Content Videography">Concept & Content Videography</option>
+                </select>
+            </div>
+            <div class="buttons">
+                <button class="next" onclick="nextPage(2)">Next</button>
+            </div>
+        </div>
+        <div id="form-page-2" class="form-page">
+            <h2>Your Business</h2>
+            <div class="form-group">
+                <label for="business">Business Name & Type:</label>
+                <input type="text" id="business" placeholder="e.g., Zoom Hundred, Video Production" required>
+            </div>
+            <div class="buttons">
+                <button class="back" onclick="previousPage(1)">Back</button>
+                <button class="next" onclick="nextPage(3)">Next</button>
+            </div>
+        </div>
+        <div id="form-page-3" class="form-page">
+            <h2>Your Budget</h2>
+            <div class="form-group">
+                <label for="budget">Budget Estimate:</label>
+                <input type="text" id="budget" placeholder="e.g., $1000" required>
+            </div>
+            <div class="buttons">
+                <button class="back" onclick="previousPage(2)">Back</button>
+                <button class="next" onclick="nextPage(4)">Next</button>
+            </div>
+        </div>
+        <div id="form-page-4" class="form-page">
+            <h2>Contact Information</h2>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" placeholder="Your Name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" placeholder="Your Email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" placeholder="Your Phone Number" required>
+            </div>
+            <div class="buttons">
+                <button class="back" onclick="previousPage(3)">Back</button>
+                <button class="next" onclick="submitForm()">Submit</button>
+            </div>
+        </div>
+        <div class="thank-you">
+            <h2>You're all set!</h2>
+            <p>Our Team will Contact You Shortly!</p>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+
+        function nextPage(page) {
+            document.getElementById(`form-page-${currentPage}`).classList.remove('active');
+            document.getElementById(`form-page-${page}`).classList.add('active');
+            currentPage = page;
+        }
+
+        function previousPage(page) {
+            document.getElementById(`form-page-${currentPage}`).classList.remove('active');
+            document.getElementById(`form-page-${page}`).classList.add('active');
+            currentPage = page;
+        }
+
+        function submitForm() {
+            const data = {
+                requirement: document.getElementById('requirement').value,
+                business: document.getElementById('business').value,
+                budget: document.getElementById('budget').value,
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value
+            };
+
+            fetch('YOUR_GOOGLE_SCRIPT_URL', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    document.querySelector('.container').style.display = 'none';
+                    document.querySelector('.thank-you').style.display = 'block';
+                }
+            }).catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
